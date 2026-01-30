@@ -1,3 +1,4 @@
 Dataset_with_Genres.csv
-Dataset_with_Genres.csv
-Dataset_with_Genres.csv
+.venv/
+dataset_clean_rap.csv
+dataset_clean_tango.csv
