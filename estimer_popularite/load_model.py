@@ -2,18 +2,18 @@ import os
 import joblib
 import matplotlib.pyplot as plt
 import sklearn.metrics as sklm
-
-from sklearn.model_selection import train_test_split
+import model.SpotifyPopularityModel as spm
 
 from src.EstimDataLoader import EstimDataLoader
-from src.EstimPreprocessor import EstimPreprocessor
-from model.SpotifyPopularityModel import SpotifyPopularityModel
-
 
 
 WK_DCT = os.getcwd()
 MODEL_PATH = f"{WK_DCT}/estimer_popularite/model/spotify_model.pkl"
 PREPROCESSOR_PATH = f"{WK_DCT}/estimer_popularite/model/preprocessor.pkl"
+
+model = spm.SpotifyPopularityModel()
+model.load(path=MODEL_PATH)
+preprocessor = joblib.load(PREPROCESSOR_PATH)
 
 dataloader = EstimDataLoader(
     f"{WK_DCT}/data/spotify_top_song_day.csv"
@@ -34,22 +34,19 @@ text_columns = [c for c in text_columns if c not in drop]
 y = df["popularity"]
 X = df.drop(columns=["popularity"])
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
+X_proc = preprocessor.transform(X,text_columns)
 
-preprocessor = EstimPreprocessor()
-X_train_proc = preprocessor.transform(X_train, text_columns)
-X_test_proc = preprocessor.transform(X_test, text_columns)
+y_pred = model.predict(X_proc)
 
-model = SpotifyPopularityModel()
-model.train(X_train_proc, y_train)
+rmse = sklm.root_mean_squared_error(y, y_pred)
+r2 = sklm.r2_score(y, y_pred)
 
+print(f"RMSE (loaded model): {rmse:.2f}")
+print(f"R² score (loaded model): {r2:.3f}")
 
-y_pred = model.predict(X_test_proc)
-
-
-model.save(path = MODEL_PATH)
-joblib.dump(preprocessor, PREPROCESSOR_PATH)
-
-print("Model et preprocessor bien sauvegarder")
+# Visualization
+plt.scatter(y, y_pred, alpha=0.5)
+plt.xlabel("Real popularity")
+plt.ylabel("Predicted popularity")
+plt.title("Loaded model – Real vs Predicted")
+plt.show()
