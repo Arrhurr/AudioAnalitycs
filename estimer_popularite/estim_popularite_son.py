@@ -10,30 +10,47 @@ from src.EstimDataLoader import EstimDataLoader
 from src.EstimPreprocessor import EstimPreprocessor
 from model.SpotifyPopularityModel import SpotifyPopularityModel
 
+from sklearn.metrics import accuracy_score
+
 
 WK_DCT = os.getcwd()
 
 dataloader = EstimDataLoader(f"{WK_DCT}/data/spotify_top_song_day.csv")
 top_day , text_columns = dataloader.load()
 
-top_day = top_day.drop(columns=["spotify_id"])
+drop = ["spotify_id","loudness","key","album_release_date","duration_ms","valence","energy","tempo","liveness","country","mode","album_name","is_explicit","snapshot_date","acousticness" ,"danceability","instrumentalness","artists"]
+for col in drop:
+    top_day = top_day.drop(columns=[col])
+    if(col in text_columns):
+        text_columns.remove(col)
 
-text_columns.remove("spotify_id")
+preprocessor = EstimPreprocessor()
 
-print("Text columns:", text_columns)
+top_day_processed = preprocessor.transform(top_day, text_columns)
 
-y_day = top_day["daily_rank"]
-x_day = top_day.drop(columns=["daily_rank"])
+corr_matrix = top_day_processed.corr()
+print(corr_matrix)
+target_corr = corr_matrix["popularity"].sort_values(
+    key=abs,
+    ascending=False
+)
+
+print(target_corr)
 
 
-X_train, X_test, y_train, y_test = train_test_split(
+
+y_day = top_day["popularity"]
+x_day = top_day.drop(columns=["popularity"])
+
+
+X_train_processed, X_test_processed, y_train, y_test = train_test_split(
     x_day, y_day, test_size=0.2, random_state=42
 )
 
 
-preprocessor = EstimPreprocessor()
-X_train_processed = preprocessor.transform(X_train, text_columns)
-X_test_processed = preprocessor.transform(X_test,text_columns)
+
+
+
 
 
 model = SpotifyPopularityModel()
@@ -47,4 +64,17 @@ rmse = sklm.root_mean_squared_error(y_test, y_pred)
 print(f"RMSE: {rmse:.2f}")
 
 
+plt.scatter(y_test, y_pred, alpha=0.5)
+plt.xlabel("Real daily rank")
+plt.ylabel("Predicted daily rank")
+plt.title("Real vs Predicted Spotify Daily Rank")
+#plt.plot(
+#    [y_test.min(), y_test.max()],
+#    [y_test.min(), y_test.max()],
+#    "r--"
+#)
+#plt.show()
 
+
+
+print(f"accuracy : {accuracy_score(y_test, y_pred.round())}")
