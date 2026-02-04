@@ -3,17 +3,18 @@ import joblib
 import matplotlib.pyplot as plt
 import sklearn.metrics as sklm
 import model.SpotifyPopularityModel as spm
+import src.EstimPreprocessor as ep
 
 from src.EstimDataLoader import EstimDataLoader
 
 
 WK_DCT = os.getcwd()
 MODEL_PATH = f"{WK_DCT}/estimer_popularite/model/spotify_model.pkl"
-PREPROCESSOR_PATH = f"{WK_DCT}/estimer_popularite/model/preprocessor.pkl"
+
 
 model = spm.SpotifyPopularityModel()
 model.load(path=MODEL_PATH)
-preprocessor = joblib.load(PREPROCESSOR_PATH)
+preprocessor = ep.EstimPreprocessor()
 
 dataloader = EstimDataLoader(
     f"{WK_DCT}/data/spotify_top_song_day.csv"

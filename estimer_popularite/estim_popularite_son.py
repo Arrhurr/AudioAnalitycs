@@ -13,7 +13,6 @@ from model.SpotifyPopularityModel import SpotifyPopularityModel
 
 WK_DCT = os.getcwd()
 MODEL_PATH = f"{WK_DCT}/estimer_popularite/model/spotify_model.pkl"
-PREPROCESSOR_PATH = f"{WK_DCT}/estimer_popularite/model/preprocessor.pkl"
 
 dataloader = EstimDataLoader(
     f"{WK_DCT}/data/spotify_top_song_day.csv"
@@ -50,6 +49,6 @@ y_pred = model.predict(X_test_proc)
 
 
 model.save(path = MODEL_PATH)
-joblib.dump(preprocessor, PREPROCESSOR_PATH)
 
-print("Model et preprocessor bien sauvegarder")
+
+print("Model bien sauvegarder")
