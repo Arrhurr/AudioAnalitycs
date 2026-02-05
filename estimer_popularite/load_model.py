@@ -51,3 +51,11 @@ plt.xlabel("Real popularity")
 plt.ylabel("Predicted popularity")
 plt.title("Loaded model – Real vs Predicted")
 plt.show()
+
+#distribution de la popularité
+plt.hist(y, bins=30)
+plt.xlabel("Popularity")
+plt.ylabel("Count")
+plt.title("Distribution of Spotify Popularity")
+plt.show()
+
