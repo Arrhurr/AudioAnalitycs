@@ -31,7 +31,7 @@ class ClusterVisualizer:
         Args:
             sample_size: nombre de points à afficher
         """
-        print("📊 Génération de la visualisation t-SNE...")
+        print(" Génération de la visualisation t-SNE...")
         
         # Échantillonner si nécessaire
         if len(self.X_scaled) > sample_size:
@@ -76,7 +76,7 @@ class ClusterVisualizer:
         output_file = f'{self.output_prefix}_tsne.png'
         plt.tight_layout()
         plt.savefig(output_file, dpi=200, bbox_inches='tight')
-        print(f"✓ Sauvegardé : {output_file}\n")
+        print(f" Sauvegardé : {output_file}\n")
         plt.close()
     
     def plot_feature_distributions(self, df, features):
@@ -87,7 +87,7 @@ class ClusterVisualizer:
             df: DataFrame
             features: liste des features
         """
-        print("📊 Génération des distributions des features...")
+        print(" Génération des distributions des features...")
         
         n_features = len(features)
         n_cols = 3
@@ -110,7 +110,7 @@ class ClusterVisualizer:
         output_file = f'{self.output_prefix}_distributions.png'
         plt.tight_layout()
         plt.savefig(output_file, dpi=150, bbox_inches='tight')
-        print(f"✓ Sauvegardé : {output_file}\n")
+        print(f" Sauvegardé : {output_file}\n")
         plt.close()
     
     def plot_correlation_matrix(self, df, features):
@@ -121,7 +121,7 @@ class ClusterVisualizer:
             df: DataFrame
             features: liste des features
         """
-        print("📊 Génération de la matrice de corrélation...")
+        print(" Génération de la matrice de corrélation...")
         
         corr = df[features].corr()
         
@@ -133,5 +133,5 @@ class ClusterVisualizer:
         output_file = f'{self.output_prefix}_correlation.png'
         plt.tight_layout()
         plt.savefig(output_file, dpi=150, bbox_inches='tight')
-        print(f"✓ Sauvegardé : {output_file}\n")
+        print(f" Sauvegardé : {output_file}\n")
         plt.close()

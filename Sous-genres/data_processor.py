@@ -41,7 +41,7 @@ class DataProcessor:
                 return []
         
         self.df['genres_list'] = self.df[genre_column].apply(parse_genre)
-        print(f"✓ Genres convertis en listes\n")
+        print(f" Genres convertis en listes\n")
         return self
     
     def show_top_genres(self, top_n=20):
@@ -87,7 +87,7 @@ class DataProcessor:
     
     def clean_data(self):
         """Nettoie les données (supprime doublons)"""
-        print("🧹 Nettoyage des données")
+        print(" Nettoyage des données")
         
         if self.df_filtered is None:
             df_to_clean = self.df
@@ -98,7 +98,7 @@ class DataProcessor:
         df_to_clean = df_to_clean.drop_duplicates(subset=['id'], keep='first')
         removed = initial - len(df_to_clean)
         
-        print(f"✓ Chansons restantes : {len(df_to_clean):,}\n")
+        print(f" Chansons restantes : {len(df_to_clean):,}\n")
         
         if self.df_filtered is None:
             self.df = df_to_clean
