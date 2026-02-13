@@ -12,6 +12,18 @@ You then need to download the different depedencies of this projet with this fol
 pip install -r requirements.txt
 ```
 
+Recommended: create a virtual environment
+```
+python -m venv venv
+```
+
+Activate:
+
+Windows:
+```
+venv\Scripts\activate
+```
+
 ## Predict the popularity of a spotify song
 
 ### How to use it
@@ -89,3 +101,101 @@ Key external factors such as media exposure, marketing strategies, social influe
 
 Moreover, the linear regression model used in this project is limited in its ability to model complex and non-linear relationships, which are likely to play a significant role in determining a song’s popularity.
 
+## Music Recommendation
+
+### Objective
+
+Objective
+Recommend musically similar tracks using Spotify audio features.
+Since no user interaction data is available, collaborative filtering is not applicable.
+A content-based filtering approach is implemented.
+
+### DATASET 
+
+universal_top_spotify_songs.csv
+
+Audio features used:
+- danceability
+- energy
+- loudness
+- speechiness
+- acousticness
+- instrumentalness
+- liveness
+- valence
+- tempo
+
+### DATA Preprocessing
+
+Implemented via SpotifyDataCleaner
+
+Steps:
+- Remove duplicates
+- Handle missing values
+- Normalize features using StandardScaler
+- Normalization ensures balanced contribution across dimensions.
+
+### Model Design
+
+#### Content-Based Filtering with Cosine Similarity
+
+Each song is represented as a feature vector.
+Similarity between two songs:
+cos(A, B) = (A · B) / (||A|| ||B||)
+
+Why this approach?
+- No user ratings available
+- Suitable for standardized feature vectors
+- Interpretable and efficient
+
+### How Recommendation Works
+
+- Load processed dataset
+- Compute cosine similarity matrix
+- Select target song
+- Rank songs by similarity
+- Return top-k recommendations with similarity scores
+
+Example output:
+
+![alt text](image.png)
+
+
+### Evaluation Strategy
+
+No ground truth labels are available.
+Therefore, evaluation is based on internal coherence metrics.
+
+Evaluation Protocol
+
+- Randomly sample 20 songs
+- Compute average similarity of top-5 recommendations
+- Compare multiple feature sets
+
+Tested configurations:
+- All features
+- Without loudness
+- Without tempo
+- Without instrumentalness
+Results visualized in visualize_model.py
+
+### Visualizations
+
+- Correlation heatmap
+- Feature impact comparison
+- Similarity score distribution
+
+These analyses justify model choices and validate performance.
+
+### Future Improvements
+
+Popularity Prediction:
+
+- Nonlinear models (Random Forest, XGBoost)
+- Feature engineering improvements
+
+Recommendation System:
+
+- Hybrid filtering
+- Clustering-based genre grouping
+- Interactive interface
