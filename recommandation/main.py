@@ -1,5 +1,6 @@
 from src.preprocessing.cleaner import SpotifyDataCleaner
 from src.recommender.content_based import ContentBasedRecommender
+import random
 
 FEATURES = [
     "danceability", "energy", "loudness",
@@ -39,7 +40,34 @@ def run_recommender():
     print("Original song:")
     print(recommender.df[recommender.df["spotify_id"] == example_id][["name", "artists"]])
 
+    mean_similarity = recommender.evaluate_similarity(example_id, top_k=5)
+    print(f"\nMean similarity score: {mean_similarity:.3f}")
+
+def evaluate_model(recommender, sample_size=20):
+    sample_ids = random.sample(
+        list(recommender.df["spotify_id"]),
+        sample_size
+    )
+
+    scores = [
+        recommender.evaluate_similarity(song_id)
+        for song_id in sample_ids
+    ]
+
+    average_score = sum(scores) / len(scores)
+
+    print(f"\nAverage similarity over {sample_size} songs: {average_score:.3f}")
 
 if __name__ == "__main__":
     preprocess()
     run_recommender()
+
+    # Évaluation
+    recommender = ContentBasedRecommender(
+        data_path=PROCESSED_PATH,
+        features=FEATURES
+    )
+    recommender.load_data()
+    recommender.fit()
+
+    evaluate_model(recommender, sample_size=20)
