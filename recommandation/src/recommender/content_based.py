@@ -56,3 +56,7 @@ class ContentBasedRecommender:
         recommendations["similarity_score"] = scores
 
         return recommendations
+    
+    def evaluate_similarity(self, song_id: str, top_k: int = 5):
+        recommendations = self.recommend(song_id, top_k)
+        return recommendations["similarity_score"].mean()
