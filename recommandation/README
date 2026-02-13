@@ -1,0 +1,13 @@
+# Recommandation
+
+Dataset
+We use the Universal Top Spotify Songs dataset from Kaggle, containing audio features and metadata for popular tracks across multiple countries.
+
+Preprocessing
+The dataset is cleaned by removing duplicates and missing values. Audio features are then standardized using z-score normalization to ensure fair distance computation.
+
+venv\Scripts\activate
+pip install pandas matplotlib seaborn scikit-learn jupyter ipykernel
+python -m ipykernel install --user --name=music-env
+
+![alt text](image.png)
