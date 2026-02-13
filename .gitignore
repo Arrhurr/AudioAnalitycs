@@ -1,4 +1,8 @@
 data/*
+__pycache__
+recommandation/venv
+recommandation/data/
+recommandation/notebooks/.ipynb_checkpoints
 __pycache__/
 
 estimer_popularite/model/preprocessor.pkl
