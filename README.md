@@ -12,9 +12,9 @@ You then need to download the different depedencies of this projet with this fol
 pip install -r requirements.txt
 ```
 
-### Predict the popularity of a spotify song
+## Predict the popularity of a spotify song
 
-#### How to use it
+### How to use it
 
 1. Load the dataset as explained in the Project Setup section.
 
@@ -22,7 +22,7 @@ pip install -r requirements.txt
 
 3. To evaluate the model, run load_model.py. This script displays the RMSE, R² score, and two graphs to assess the model’s accuracy and visualize the popularity distribution.
 
-#### How does it work
+### How does it work
 
 This feature aims to estimate the popularity score of a Spotify song (from 0 to 100) based on its metadata characteristics.
 The prediction is performed using a machine learning regression model trained on historical Spotify chart data.
@@ -65,7 +65,7 @@ The prediction pipeline is composed of the following steps:
 During the training phase, several feature selection steps were applied.
 To limit the dimensionality of the dataset, multiple tests were conducted and only a subset of the most relevant features was kept for model training.
 
-#### Model evaluation
+### Model evaluation
 
 The model is evaluated using standard regression metrics:
 
@@ -83,7 +83,7 @@ These results show that:
 
 * Extreme popularity values are harder to predict due to dataset imbalance, a lot of the popularity range from 40 to 100 while a little minority are around 0 (cf load_model.py second graph)
 
-#### Limitation
+### Limitation
 The dataset used in this project is inherently biased, as it focuses exclusively on top-charting songs across different countries. As a result, it does not fully reflect the diversity and complexity of the music industry.
 Key external factors such as media exposure, marketing strategies, social influence, and promotional campaigns are not present in the dataset, which limits the accuracy of the popularity predictions.
 
