@@ -133,6 +133,67 @@ def plot_feature_comparison():
     plt.title("Feature Impact on Recommendation Quality")
     plt.show()
 
+# ==============================
+# PART 3 — SUBGENRE DISCOVERY (CLUSTERING)
+# ==============================
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+
+CLUSTER_DATA_PATH = f"{WK_DCT}/data/dataset_clean_rap.csv"
+
+CLUSTER_FEATURES = [
+    "danceability", "energy", "loudness", "tempo",
+    "valence", "speechiness", "acousticness",
+    "instrumentalness", "liveness"
+]
+
+
+def run_subgenre_clustering(k=4):
+    df = pd.read_csv(CLUSTER_DATA_PATH)
+
+    # Keep only available features
+    features = [f for f in CLUSTER_FEATURES if f in df.columns]
+    X = df[features].copy()
+
+    # Convert to numeric
+    for col in features:
+        X[col] = pd.to_numeric(X[col], errors="coerce")
+
+    X = X.dropna()
+
+    # Standardize
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    X_scaled = np.nan_to_num(X_scaled)
+
+    # KMeans
+    kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)
+    df = df.loc[X.index].copy()
+    df["cluster"] = kmeans.fit_predict(X_scaled)
+
+    # PCA for visualization
+    pca = PCA(n_components=2, random_state=42)
+    X_pca = pca.fit_transform(X_scaled)
+
+    df["pca1"] = X_pca[:, 0]
+    df["pca2"] = X_pca[:, 1]
+
+    # Plot clusters
+    plt.figure(figsize=(8, 6))
+    plt.scatter(df["pca1"], df["pca2"], c=df["cluster"], alpha=0.6)
+    plt.xlabel("PCA 1")
+    plt.ylabel("PCA 2")
+    plt.title(f"Subgenre Clusters (k={k})")
+    plt.show()
+
+    # Print cluster means
+    cluster_means = df.groupby("cluster")[features].mean().round(3)
+    print("\nCluster Means:\n")
+    print(cluster_means)
+
+    return df
 
 # ==============================
 # MAIN
@@ -145,3 +206,4 @@ if __name__ == "__main__":
     # Recommendation visualizations
     plot_correlation_heatmap()
     plot_feature_comparison()
+    run_subgenre_clustering(k=4)
